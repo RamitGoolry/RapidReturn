@@ -10,6 +10,7 @@ function M.push_cursor()
       print("Already stored this cursor position")
       return
     end
+  end
 
   stack.push({vim.fn.line('.'), vim.fn.col('.')})
 end
