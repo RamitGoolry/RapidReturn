@@ -4,7 +4,7 @@ local M = {}
 
 local text = "⚓" -- text to display
 
-function M.push_cursor() -- TODO Rename to save
+function M.save()
   local top = stack.top()
 
   if top then
@@ -20,7 +20,7 @@ function M.push_cursor() -- TODO Rename to save
   vim.api.nvim_buf_set_virtual_text(0, 0, vim.fn.line('.') - 1, {{text .. stack.size(), "LineNr"}}, {})
 end
 
-function M.pop_cursor() -- TODO Rename to back
+function M.rewind()
   local pos = stack.pop()
 
   if pos then
