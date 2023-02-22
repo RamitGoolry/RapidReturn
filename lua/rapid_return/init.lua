@@ -1,3 +1,4 @@
+local rapid_return = require("rapid_return")
 local stack = require("rapid_return.stack")
 
 function push_cursor()
