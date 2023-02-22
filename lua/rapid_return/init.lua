@@ -9,6 +9,9 @@ function pop_cursor()
 
   if pos then
     vim.fn.cursor(pos[1], pos[2])
+  else
+    vim.api.nvim_err_write("No more cursors to pop")
+    print("No more cursors to pop")
   end
 end
 
