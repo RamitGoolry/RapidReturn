@@ -1,10 +1,20 @@
 local stack = require("rapid_return.stack")
 
-function push_cursor()
-  stack.push({vim.fn.line("."), vim.fn.col(".")})
+local M = {}
+
+function M.push_cursor()
+  local top = stack.top()
+
+  if top then
+    if top[1] == vim.fn.line('.') and top[2] == vim.fn.col('.') then
+      print("Already stored this cursor position")
+      return
+    end
+
+  stack.push({vim.fn.line('.'), vim.fn.col('.')})
 end
 
-function pop_cursor()
+function M.pop_cursor()
   local pos = stack.pop()
 
   if pos then
@@ -15,7 +25,4 @@ function pop_cursor()
   end
 end
 
-return {
-  push_cursor = push_cursor,
-  pop_cursor = pop_cursor
-}
+return M
