@@ -13,6 +13,7 @@ function M.push_cursor()
   end
 
   stack.push({vim.fn.line('.'), vim.fn.col('.'), vim.fn.expand('%')})
+  print("Cursor position stored")
 end
 
 function M.pop_cursor()
@@ -29,6 +30,7 @@ end
 
 function M.clear()
   stack.clear()
+  print("Cleared all cursors")
 end
 
 return M
