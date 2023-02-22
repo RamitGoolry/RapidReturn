@@ -1,27 +1,50 @@
 local stack = {}
 
 local items = {}
+local cursor = 0
 
 function stack.push(item)
-    table.insert(items, item)
+
+  if cursor < #items then
+    -- We are deleting all items after the cursor
+    for i = #items, cursor + 1, -1 do
+      table.remove(items, i)
+    end
+  end
+
+  table.insert(items, item)
+  cursor = cursor + 1
 end
 
 function stack.pop()
     if #items == 0 then
         return nil
     end
-    return table.remove(items)
+
+    -- We are delayinng deletion of the item until the next push to enable
+    -- forward
+    cursor = cursor - 1
+
+    return items[cursor + 1]
 end
 
 function stack.size()
-    return #items
+    return cursor
+end
+
+function stack.is_at_end() 
+  return cursor == #items
+end
+
+function stack.advance() 
+  cursor = cursor + 1
 end
 
 function stack.top()
     if #items == 0 then
         return nil
     end
-    return items[#items]
+    return items[cursor]
 end
 
 function stack.clear()
