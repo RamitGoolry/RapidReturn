@@ -12,13 +12,14 @@ function M.push_cursor()
     end
   end
 
-  stack.push({vim.fn.line('.'), vim.fn.col('.')})
+  stack.push({vim.fn.line('.'), vim.fn.col('.'), vim.fn.expand('%')})
 end
 
 function M.pop_cursor()
   local pos = stack.pop()
 
   if pos then
+    vim.cmd('edit ' .. pos[3])
     vim.fn.cursor(pos[1], pos[2])
   else
     vim.api.nvim_err_write("No more cursors to pop")
