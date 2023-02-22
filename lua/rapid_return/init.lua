@@ -37,8 +37,13 @@ function M.pop_cursor()
 end
 
 function M.clear()
-  stack.clear()
-  -- TODO Clear all signs
+
+  for i = 1, stack.size() do
+    local pos = stack.pop()
+    vim.api.nvim_buf_clear_namespace(0, 0, pos[1] - 1, pos[1])
+    vim.api.nvim_buf_set_virtual_text(0, 0, pos[1] - 1, {}, {})
+  end
+
   print("Cleared all cursors")
 end
 
