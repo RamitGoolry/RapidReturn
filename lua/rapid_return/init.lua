@@ -26,4 +26,8 @@ function M.pop_cursor()
   end
 end
 
+function M.clear()
+  stack.clear()
+end
+
 return M
