@@ -17,7 +17,7 @@ function stack.push(item)
 end
 
 function stack.pop()
-    if #items == 0 then
+    if cursor == 0 then
         return nil
     end
 
@@ -32,7 +32,7 @@ function stack.size()
     return cursor
 end
 
-function stack.is_at_end() 
+function stack.is_at_end()
   return cursor == #items
 end
 
