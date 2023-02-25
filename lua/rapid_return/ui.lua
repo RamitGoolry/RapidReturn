@@ -35,8 +35,11 @@ function M.history(opts)
       vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.fn.readfile(file))
 
+      -- TODO Jump to the correct line and column
+
       -- Highlight the whole line
       vim.api.nvim_buf_add_highlight(bufnr, -1, 'CursorLine', line - 1, 0, -1)
+
     end
   }
 
