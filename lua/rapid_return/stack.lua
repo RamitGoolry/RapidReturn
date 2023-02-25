@@ -51,4 +51,16 @@ function stack.clear()
     items = {}
 end
 
+function stack.get_all()
+    -- TODO return items from 0 to cursor
+    
+    output = {}
+
+    for i = 1, cursor do
+      table.insert(output, items[i])
+    end
+
+    return output
+end
+
 return stack
