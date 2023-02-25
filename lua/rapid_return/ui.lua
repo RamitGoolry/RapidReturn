@@ -11,8 +11,7 @@ local action_state = require('telescope.actions.state')
 local M = {}
 
 function M.history(opts)
-  -- Show all the saved cursors and allow you to pick 
-  -- one to jump to.
+  -- Show all the saved cursors and allow you to pick one to jump to.
   -- Currently, no options are supported
   opts = opts or {}
   local entries = stack.get_items()
@@ -32,6 +31,7 @@ function M.history(opts)
       local SIZE = math.floor(vim.api.nvim_win_get_height(self.state.winid) / 2);
 
       -- Extract the filetype from the file extension
+      -- FIXME This does not work for .py files
       local filetype = vim.fn.fnamemodify(file, ':e')
 
       -- Read the file into the buffer and have syntax highlightning enabled
@@ -43,7 +43,11 @@ function M.history(opts)
 
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false))
 
-      vim.api.nvim_buf_add_highlight(bufnr, -1, 'CursorLine', SIZE - 1, 0, -1)
+      if start_line == 0 then
+        vim.api.nvim_buf_add_highlight(bufnr, -1, 'CursorLine', line - 1, 0, -1)
+      else
+        vim.api.nvim_buf_add_highlight(bufnr, -1, 'CursorLine', SIZE - 1, 0, -1)
+      end
     end
   }
 
