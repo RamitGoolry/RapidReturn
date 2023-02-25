@@ -1,4 +1,5 @@
 local stack = require("rapid_return.stack")
+local util = require("rapid_return.util")
 
 local M = {}
 
@@ -14,7 +15,12 @@ function M.save()
     end
   end
 
-  stack.push({vim.fn.line('.'), vim.fn.col('.'), vim.fn.expand('%')})
+  stack.push({
+    line = vim.fn.line('.'),
+    col = vim.fn.col('.'), 
+    file = vim.fn.expand('%'),
+    index = stack.size() + 1
+  })
 
   -- Set cursor locations
   vim.api.nvim_buf_set_virtual_text(0, 0, vim.fn.line('.') - 1, {{text .. stack.size(), "LineNr"}}, {})
@@ -24,12 +30,11 @@ function M.rewind()
   local pos = stack.pop()
 
   if pos then
-    vim.cmd('edit ' .. pos[3])
-    vim.fn.cursor(pos[1], pos[2])
+    vim.cmd('edit ' .. pos.file)
+    vim.fn.cursor(pos.line, pos.col)
 
     -- Remove cursor locations
-    vim.api.nvim_buf_clear_namespace(0, 0, pos[1] - 1, pos[1])
-    vim.api.nvim_buf_set_virtual_text(0, 0, pos[1] - 1, {}, {})
+    util.clear_virtual_text(pos.line)
   else
     print("No more cursors to pop")
   end
@@ -45,8 +50,8 @@ function M.forward()
 
   local pos = stack.top()
 
-  vim.cmd('edit ' .. pos[3])
-  vim.fn.cursor(pos[1], pos[2])
+  vim.cmd('edit ' .. pos.file)
+  vim.fn.cursor(pos.line, pos.col)
 
   -- Set cursor locations
   vim.api.nvim_buf_set_virtual_text(0, 0, vim.fn.line('.') - 1, {{text .. stack.size(), "LineNr"}}, {})
@@ -56,14 +61,38 @@ function M.clear()
 
   for i = 1, stack.size() do
     local pos = stack.pop()
-    vim.api.nvim_buf_clear_namespace(0, 0, pos[1] - 1, pos[1])
-    vim.api.nvim_buf_set_virtual_text(0, 0, pos[1] - 1, {}, {})
+    util.clear_virtual_text(pos.line)
   end
 
   -- True clear
   stack.clear()
 
   print("Cleared all cursors")
+end
+
+function M.go_to(index)
+  if index == nil then
+    print('Index not provided')
+    return
+  end
+
+  if index > stack.size() then
+    print('Index out of bounds')
+    return
+  end
+
+  for i = index + 1, stack.size() do
+    local pos = stack.pop()
+    util.clear_virtual_text(pos.line)
+  end
+
+  local pos = stack.pop()
+
+  vim.cmd('edit ' .. pos.file)
+  vim.fn.cursor(pos.line, pos.col)
+
+  util.clear_virtual_text(pos.line)
+
 end
 
 return M

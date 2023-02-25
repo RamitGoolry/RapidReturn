@@ -2,11 +2,14 @@
 
 -- Imports
 local stack = require('rapid_return.stack')
+local cmd = require('rapid_return.cmd')
 
 local telescope = require('telescope')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local conf = require('telescope.config').values
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
 
 local M = {}
 
@@ -15,7 +18,22 @@ function M.history(opts)
   -- one to jump to.
   -- Currently, no options are supported
   opts = opts or {}
-  local entries = stack.get_all()
+  local entries = stack.get_items()
+
+  -- TODO Previewer
+  
+  local attach_mappings = function(prompt_bufnr, map)
+    actions.select_default:replace(function ()
+      local entry = action_state.get_selected_entry()
+
+      print(entry.index)
+
+      actions.close(prompt_bufnr)
+
+      cmd.go_to(entry.index)
+    end)
+    return true
+  end
 
   pickers.new(opts, {
     prompt_title = 'Saved Cursors',
@@ -24,11 +42,13 @@ function M.history(opts)
       entry_maker = function(entry)
         return {
           value = entry,
-          display = entry[3] .. ': Line ' .. entry[1],
-          ordinal = entry[3] .. ':' .. entry[1] -- TODO Needed?
+          display = entry.file .. ': Line ' .. entry.line,
+          ordinal = entry.file .. ':' .. entry.line -- TODO Needed
         }
       end
-    }
+    },
+    --previewer = previewer
+    attach_mappings = attach_mappings
   }):find()
 
 end

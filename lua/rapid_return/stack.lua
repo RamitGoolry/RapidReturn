@@ -51,7 +51,7 @@ function stack.clear()
     items = {}
 end
 
-function stack.get_all()
+function stack.get_items()
     -- TODO return items from 0 to cursor
     
     output = {}
