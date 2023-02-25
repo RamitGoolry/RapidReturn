@@ -4,7 +4,6 @@ local cmd = require('rapid_return.cmd')
 
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
-local conf = require('telescope.config').values
 local previewers = require('telescope.previewers')
 local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
@@ -27,7 +26,7 @@ function M.history(opts)
       local bufnr = self.state.bufnr
       local file = entry.value.file
       local line = entry.value.line
-      local column = entry.value.column
+      local column = entry.value.col
 
       -- Extract the filetype from the file extension
       local filetype = vim.fn.fnamemodify(file, ':e')
@@ -36,8 +35,8 @@ function M.history(opts)
       vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.fn.readfile(file))
 
-      -- Highlight the line
-      vim.api.nvim_buf_add_highlight(bufnr, -1, 'TelescopePreviewCursor', line - 1, 0, -1)
+      -- Highlight the whole line
+      vim.api.nvim_buf_add_highlight(bufnr, -1, 'CursorLine', line - 1, 0, -1)
     end
   }
 
