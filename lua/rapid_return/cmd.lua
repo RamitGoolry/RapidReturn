@@ -50,7 +50,9 @@ function M.forward()
 
   local pos = stack.top()
 
-  vim.cmd('edit ' .. pos.file)
+  if vim.fn.expand('%') ~= pos.file then
+    vim.cmd('edit ' .. pos.file)
+  end
   vim.fn.cursor(pos.line, pos.col)
 
   -- Set cursor locations
@@ -88,7 +90,9 @@ function M.go_to(index)
 
   local pos = stack.pop()
 
-  vim.cmd('edit ' .. pos.file)
+  if vim.fn.expand('%') ~= pos.file then
+    vim.cmd('edit ' .. pos.file)
+  end
   vim.fn.cursor(pos.line, pos.col)
 
   util.clear_virtual_text(pos.line)

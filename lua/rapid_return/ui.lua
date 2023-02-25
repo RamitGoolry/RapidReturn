@@ -1,6 +1,7 @@
 -- Imports
 local stack = require('rapid_return.stack')
 local cmd = require('rapid_return.cmd')
+local util = require('rapid_return.util')
 
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
@@ -31,9 +32,8 @@ function M.history(opts)
       local SIZE = math.floor(vim.api.nvim_win_get_height(self.state.winid) / 2);
 
       -- Extract the filetype from the file extension
-      -- FIXME This does not work for .py files
-      local filetype = vim.fn.fnamemodify(file, ':e')
-
+      local filetype = util.extension_map[vim.fn.fnamemodify(file, ':e')]
+      
       -- Read the file into the buffer and have syntax highlightning enabled
       vim.api.nvim_buf_set_option(bufnr, 'filetype', filetype)
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.fn.readfile(file))
