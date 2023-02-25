@@ -51,8 +51,6 @@ function M.history(opts)
     end
   }
 
-  --local previewer = previewers.vim_buffer_cat.new(opts)
-
   local attach_mappings = function(prompt_bufnr, map)
     actions.select_default:replace(function ()
       local entry = action_state.get_selected_entry()
@@ -69,7 +67,7 @@ function M.history(opts)
       entry_maker = function(entry)
         return {
           value = entry,
-          display = entry.file .. ': Line ' .. entry.line,
+          display = entry.index .. '. ' .. entry.file .. ': Line ' .. entry.line,
           ordinal = entry.file .. ': Line ' .. entry.line
         }
       end
