@@ -40,6 +40,18 @@ function M.rewind()
   end
 end
 
+function M.rewind_all()
+  for _ = 1, stack.size() do
+    local pos = stack.pop()
+    util.clear_virtual_text(pos.line)
+
+    if stack.top() == nil then
+      vim.cmd('edit ' .. pos.file)
+      vim.fn.cursor(pos.line, pos.col)
+    end
+  end
+end
+
 function M.forward()
   if stack.is_at_end() then
     print("Already at the last cursor")
@@ -61,7 +73,7 @@ end
 
 function M.clear()
 
-  for i = 1, stack.size() do
+  for _ = 1, stack.size() do
     local pos = stack.pop()
     util.clear_virtual_text(pos.line)
   end
