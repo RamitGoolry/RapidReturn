@@ -9,8 +9,8 @@ function M.save()
   local top = stack.top()
 
   if top then
-    if top[1] == vim.fn.line('.') and top[2] == vim.fn.col('.') then
-      print("Already stored this cursor position")
+    if top.line == vim.fn.line('.') then
+      print("Already saved this line.")
       return
     end
   end
